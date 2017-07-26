@@ -43,7 +43,6 @@ public class CustomRepositoryRestMvcConfiguration extends RepositoryRestMvcConfi
 	/**
 	 * SD REST Settings
 	 */
-	@Override
 	protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
 		config.setReturnBodyOnCreate(true);
 		config.setReturnBodyOnUpdate(true);
@@ -54,7 +53,6 @@ public class CustomRepositoryRestMvcConfiguration extends RepositoryRestMvcConfi
 		config.useHalAsDefaultJsonMediaType(false);
 	}
 
-	@Override
 	protected void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener v) {
 		v.addValidator("beforeSave", agentUpdateValidator);
 	}

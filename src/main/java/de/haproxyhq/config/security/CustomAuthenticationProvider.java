@@ -3,7 +3,9 @@
  */
 package de.haproxyhq.config.security;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -11,6 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import de.haproxyhq.bean.SecurityBean;
 import de.haproxyhq.config.security.filter.TimestampHashAuthenticationToken;
 
 /**
@@ -20,8 +23,15 @@ import de.haproxyhq.config.security.filter.TimestampHashAuthenticationToken;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 	
-	@Value("${security.token.default}")
+	@Autowired
+	private SecurityBean securityBean;
+	
 	private String token;
+	
+	@PostConstruct
+	private void initValues() {
+		token = securityBean.getDefaultToken();
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.springframework.security.authentication.AuthenticationProvider#authenticate(org.springframework.security.core.Authentication)
