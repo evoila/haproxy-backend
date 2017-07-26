@@ -47,7 +47,6 @@ public class CustomMongoDBRepositoryConfig {
 		
 		@PostConstruct
 		private void initValues() {
-			System.out.println(databaseBean.getHost());
 			databaseHost = databaseBean.getHost();
 			databaseUsername = databaseBean.getUser();
 			databasePassword = databaseBean.getPassword();
@@ -74,9 +73,6 @@ public class CustomMongoDBRepositoryConfig {
 		}
 
 		protected List<MongoCredential> getMongoCredentials() {
-			System.out.println(databaseUsername);
-			System.out.println(databaseName);
-			System.out.println(databasePassword);
 			MongoCredential credential = MongoCredential.createCredential(databaseUsername, databaseName,
 					databasePassword.toCharArray());
 			List<MongoCredential> credentialList = new ArrayList<>();
