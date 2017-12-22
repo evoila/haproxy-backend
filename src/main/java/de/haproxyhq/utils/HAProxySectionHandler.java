@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.haproxyhq.bean.HAProxyBean;
 import de.haproxyhq.controller.schema.types.ConnectionDetails;
 import de.haproxyhq.controller.schema.types.InternalConnectionDetails;
 import de.haproxyhq.nosql.model.HAProxyConfig;
@@ -43,19 +46,26 @@ public class HAProxySectionHandler {
 	
 	private static final String MODE = "mode";
 
-	@Value("${haproxy.port_range.start}")
+	@Autowired
+	private HAProxyBean haproxyBean;
+	
 	private int portRangeStart;
 
-	@Value("${haproxy.port_range.end}")
 	private int portRangeEnd;
 
-	@Value("${haproxy.external_ip}")
 	private String haProxyExternalIp;
 
 	private List<Integer> availablePorts = new ArrayList<Integer>();
 
 	private List<Integer> usedPorts = new ArrayList<Integer>();
 
+	@PostConstruct
+	private void initValues() {
+		portRangeStart = haproxyBean.getPortRangeStart();
+		portRangeEnd = haproxyBean.getPortRangeEnd();
+		haProxyExternalIp = haproxyBean.getExternalIp();
+	}
+	
 	public ConnectionDetails append(HAProxyConfig haProxyConfig, InternalConnectionDetails internalConnectionDetails) {
 		List<Section> sections = haProxyConfig.getSections();
 

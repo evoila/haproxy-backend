@@ -2,7 +2,8 @@ package de.haproxyhq;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -13,6 +14,7 @@ import org.springframework.web.filter.CorsFilter;
  * @author Johannes Hiemer.
  *
  */
+@RefreshScope
 @SpringBootApplication
 public class Application {
 

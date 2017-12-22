@@ -23,10 +23,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CustomAmqpConfig {
 
-	@Value("${rabbitmq.routingkey.prefix}")
+	@Value("${rabbitmq.routingkey.prefix:null}")
 	private String routingKeyPrefix;
 
-	@Value("${rabbitmq.exchange.prefix}")
+	@Value("${rabbitmq.exchange.prefix:null}")
 	private String exchangePrefix;
 
 	@Autowired

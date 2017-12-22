@@ -6,7 +6,9 @@ package de.haproxyhq.config.nosql;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
@@ -18,6 +20,7 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import com.mongodb.WriteConcern;
 
+import de.haproxyhq.bean.DatabaseBean;
 import de.haproxyhq.utils.PackageUtils;
 
 /**
@@ -28,25 +31,28 @@ import de.haproxyhq.utils.PackageUtils;
 @Configuration
 @EnableMongoRepositories(basePackages = { PackageUtils.NOSQL_REPOSITORIES_PACKAGE })
 public class CustomMongoDBRepositoryConfig {
-
+	
 	@Configuration
 	@Profile("default")
 	static class Default extends AbstractMongoConfiguration {
 
-		@Value("${database.nosql.host}")
+		@Autowired
+		private DatabaseBean databaseBean;
+		
 		private String databaseHost;
-
-		@Value("${database.nosql.user}")
 		private String databaseUsername;
-
-		@Value("${database.nosql.password}")
 		private String databasePassword;
-
-		@Value("${database.nosql.port}")
-		private int databasePort;
-
-		@Value("${database.nosql.database}")
+		private int databasePort;		
 		private String databaseName;
+		
+		@PostConstruct
+		private void initValues() {
+			databaseHost = databaseBean.getHost();
+			databaseUsername = databaseBean.getUser();
+			databasePassword = databaseBean.getPassword();
+			databasePort = databaseBean.getPort();
+			databaseName = databaseBean.getDatabase();
+		}
 
 		@Override
 		protected String getDatabaseName() {
