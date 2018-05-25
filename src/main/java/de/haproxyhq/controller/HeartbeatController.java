@@ -32,6 +32,6 @@ public class HeartbeatController {
     	for(Agent agent : agentRepository.findAll()) 
     		agentHeartbeats.put(agent.getId().toString(), agent.getAgentHeartbeat());    
     	
-        return new ResponseEntity<Map<String, AgentHeartbeatStatus>>(agentHeartbeats, HttpStatus.OK);
+        return new ResponseEntity<>(agentHeartbeats, HttpStatus.OK);
     }
 }

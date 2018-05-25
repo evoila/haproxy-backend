@@ -55,16 +55,16 @@ public class HAProxySectionConfigurerController {
 			HttpServletRequest request, HttpServletResponse response) {
 
 		if (agent == null) {
-			return new ResponseEntity<Resource<Object>>(
-					new Resource<Object>(new ResponseMessage("No agent name provided.")), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(
+					new Resource<>(new ResponseMessage("No agent name provided.")), HttpStatus.NOT_FOUND);
 		}
 
 		ObjectId agentId;
 		try {
 			agentId = new ObjectId(agent);
 		} catch (IllegalArgumentException ex) {
-			return new ResponseEntity<Resource<Object>>(
-					new Resource<Object>(new ResponseMessage("Agent name is not of type id.")), HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(
+					new Resource<>(new ResponseMessage("Agent name is not of type id.")), HttpStatus.NOT_FOUND);
 		}
 		Agent defaultAgent = agentRepository.findOne(agentId);
 		if (defaultAgent != null) {
@@ -84,7 +84,7 @@ public class HAProxySectionConfigurerController {
 					log.error(e.getMessage(), e);
 				}
 
-				return new ResponseEntity<Resource<Object>>(new Resource<Object>(externalConnectionDetails),
+				return new ResponseEntity<>(new Resource<>(externalConnectionDetails),
 						HttpStatus.CREATED);
 			} else
 				return new ResponseEntity<Resource<Object>>(

@@ -5,6 +5,7 @@ package de.haproxyhq.config.security;
 
 import javax.annotation.PostConstruct;
 
+import de.haproxyhq.bean.SecurityBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,7 +14,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import de.haproxyhq.bean.SecurityBean;
 import de.haproxyhq.config.security.filter.TimestampHashAuthenticationToken;
 
 /**

@@ -8,12 +8,12 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import de.haproxyhq.bean.HAProxyBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.haproxyhq.bean.HAProxyBean;
 import de.haproxyhq.controller.schema.types.ConnectionDetails;
 import de.haproxyhq.controller.schema.types.InternalConnectionDetails;
 import de.haproxyhq.nosql.model.HAProxyConfig;

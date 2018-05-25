@@ -27,9 +27,8 @@ public class AmqpBrokerController {
 	public ResponseEntity<Map<String, String>> getMqttBrokerInfo() {
 		Map<String, String> mqttBroker = new HashMap<>();
 		mqttBroker.put("host", mqttConfig.getHost());
-		// mqttBroker.put("clientId", mqttConfig.getClientId());
 		mqttBroker.put("exchangePrefix", mqttConfig.getExchangePrefix());
 
-		return new ResponseEntity<Map<String, String>>(mqttBroker, HttpStatus.OK);
+		return new ResponseEntity<>(mqttBroker, HttpStatus.OK);
 	}
 }

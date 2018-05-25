@@ -2,13 +2,15 @@
 instances: 1
 timeout: 180
 memory: 1024M
-domain: example.com
 applications:
-- name: haproxy
-  host: haproxy
-  path: target/haproxy-backend.jar
+- name: osb-service-key-manager
+  host: osb-service-key-manager
+  path: target/osb-service-key-manager.jar
   buildpack: https://github.com/cloudfoundry/java-buildpack.git
-  services:
-    - haproxy_mongodb
-  env: 
+  env:
+    SPRING_APPLICATION_NAME: osb-service-key-manager
+    SPRING_CLOUD_CONFIG_PASSWORD: cloudfoundry
+    SPRING_CLOUD_CONFIG_URI: http://config-server.cf.dev.eu-de-central.msh.host
+    SPRING_CLOUD_CONFIG_USERNAME: admin
+    SPRING_PROFILES_ACTIVE: dev.eu-de-central
     JAVA_OPTS: -Djava.security.egd=file:/dev/urandom
