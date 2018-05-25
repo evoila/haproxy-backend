@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
 @Service
-@ConfigurationProperties(prefix="security.token")
+@ConfigurationProperties(prefix="security")
 public class SecurityBean {
 
 	private String token;
