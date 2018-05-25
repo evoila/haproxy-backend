@@ -5,6 +5,7 @@ package de.haproxyhq.config.security;
 
 import javax.annotation.PostConstruct;
 
+import com.rabbitmq.client.AuthenticationFailureException;
 import de.haproxyhq.bean.SecurityBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,8 +30,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	private String token;
 	
 	@PostConstruct
-	private void initValues() {
-		token = securityBean.getDefaultToken();
+	private void initValues() throws AuthenticationFailureException {
+		token = securityBean.getToken();
+		if (token == null){
+			throw new AuthenticationFailureException("Secutity token is null");
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -45,7 +49,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			throw new UsernameNotFoundException(String.format("Invalid credentials", authentication.getPrincipal()));
 		}
 		
-        if(authentication.getCredentials() != null  && !token.equals(authentication.getCredentials().toString())){
+        if(!token.equals(authentication.getCredentials().toString())){
             throw new BadCredentialsException("Invalid credentials");
         }
  

@@ -7,21 +7,21 @@ import org.springframework.stereotype.Service;
 @ConfigurationProperties(prefix="security.token")
 public class SecurityBean {
 
-	private String defaultToken;
+	private String token;
 	private String name;
-	
-	public String getDefaultToken() {
-		return defaultToken;
+
+	public String getToken() {
+		return token;
 	}
-	
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public String getName() {
 		return name;
 	}
-	
-	public void setDefaultToken(String defaultToken) {
-		this.defaultToken = defaultToken;
-	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
