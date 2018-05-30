@@ -49,7 +49,7 @@ public class AmqpPublisher {
 		log.info("Returning response: " + response);
 
 		if (response == null) {
-			throw new TimeoutException("Job is taking too long!");
+			throw new TimeoutException("Job is taking too long, probably Agent on HaProxy Service Key Host is!");
 		}
 
 		validateResponse(response);
