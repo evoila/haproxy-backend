@@ -9,7 +9,7 @@ import org.springframework.data.rest.core.annotation.HandleAfterSave;
 import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
 import org.springframework.stereotype.Component;
 
-import de.haproxyhq.mqtt.client.AmqpPublisher;
+import de.haproxyhq.amqp.client.AmqpPublisher;
 import de.haproxyhq.nosql.model.Agent;
 
 /**

@@ -23,19 +23,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CustomAmqpConfig {
 
-	@Value("${rabbitmq.routingkey.prefix:}")
-	private String routingKeyPrefix;
-
-	@Value("${rabbitmq.exchange.prefix:}")
-	private String exchangePrefix;
+    @Value("${agent.reply}")
+    private String replyMessage;
 
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-
-	@Bean
-	public DirectExchange exchange() {
-		return new DirectExchange(exchangePrefix, false, false);
-	}
 
 	@PostConstruct
 	public void configureRabbitTemplate() {
@@ -43,38 +35,23 @@ public class CustomAmqpConfig {
 		rabbitTemplate.setCorrelationKey(UUID.randomUUID().toString());
 	}
 
-	/**
-	 * @return
-	 */
 	public String getCharset() {
 		return Charset.defaultCharset().displayName();
 	}
 
-	/**
-	 * @return
-	 */
 	public String getContentType() {
 		return MessageProperties.CONTENT_TYPE_JSON;
 	}
 
-	/**
-	 * @return
-	 */
-	public String getRoutingKeyPrefix() {
-		return routingKeyPrefix;
-	}
-
-	/**
-	 * @return
-	 */
-	public String getExchangePrefix() {
-		return exchangePrefix;
-	}
-
-	/**
-	 * @return
-	 */
 	public String getHost() {
 		return rabbitTemplate.getConnectionFactory().getHost();
 	}
+
+    public String getReplyMessage() {
+        return replyMessage;
+    }
+
+    public void setReplyMessage(String replyMessage) {
+        this.replyMessage = replyMessage;
+    }
 }

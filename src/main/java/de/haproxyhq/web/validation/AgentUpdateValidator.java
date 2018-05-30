@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import de.haproxyhq.mqtt.client.AmqpPublisher;
+import de.haproxyhq.amqp.client.AmqpPublisher;
 import de.haproxyhq.nosql.model.Agent;
 import de.haproxyhq.nosql.repositories.AgentRepository;
 import de.haproxyhq.web.validation.utils.ValidationUtils;

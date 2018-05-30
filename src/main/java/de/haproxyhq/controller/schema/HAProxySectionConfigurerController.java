@@ -6,6 +6,7 @@ import java.util.concurrent.TimeoutException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import de.haproxyhq.amqp.client.AmqpPublisher;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import de.haproxyhq.controller.schema.types.ConnectionDetails;
 import de.haproxyhq.controller.schema.types.InternalConnectionDetails;
-import de.haproxyhq.mqtt.client.AmqpPublisher;
 import de.haproxyhq.nosql.model.Agent;
 import de.haproxyhq.nosql.model.HAProxyConfig;
 import de.haproxyhq.nosql.repositories.AgentRepository;
@@ -41,7 +41,7 @@ public class HAProxySectionConfigurerController {
 	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private AmqpPublisher mqttPublisher;
+	private AmqpPublisher amqpPublisher;
 
 	@Autowired
 	private AgentRepository agentRepository;
@@ -81,7 +81,7 @@ public class HAProxySectionConfigurerController {
 				agentRepository.save(defaultAgent);
 
 				try {
-					mqttPublisher.publishAgentConfig(defaultAgent.getId());
+					amqpPublisher.publishAgentConfig(defaultAgent.getId());
 				} catch (IllegalStateException | TimeoutException e) {
 					log.error(e.getMessage(), e);
 				}
@@ -90,16 +90,16 @@ public class HAProxySectionConfigurerController {
 						HttpStatus.CREATED);
 			} else
 				log.debug("Configuration Entry already exists in HAProxy config " + request);
-				return new ResponseEntity<Resource<Object>>(
-						new Resource<Object>(
+				return new ResponseEntity<>(
+						new Resource<>(
 								new ResponseMessage("Configuration Entry already exists in HAProxy config")),
 						HttpStatus.BAD_REQUEST);
 
 		} else
 			log.debug("Could not find agent for name: " + agent);
-			return new ResponseEntity<Resource<Object>>(
+			return new ResponseEntity<>(
 
-					new Resource<Object>(new ResponseMessage("Could not find agent for name: " + agent)),
+					new Resource<>(new ResponseMessage("Could not find agent for name: " + agent)),
 					HttpStatus.NOT_FOUND);
 
 	}
@@ -123,19 +123,19 @@ public class HAProxySectionConfigurerController {
 					agentRepository.save(defaultAgent);
 
 					try {
-						mqttPublisher.publishAgentConfig(defaultAgent.getId());
+						amqpPublisher.publishAgentConfig(defaultAgent.getId());
 					} catch (IllegalStateException | TimeoutException e) {
 						log.error(e.getMessage(), e);
 					}
 
-					return new ResponseEntity<Resource<Object>>(HttpStatus.NO_CONTENT);
+					return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 				} else
-					return new ResponseEntity<Resource<Object>>(
-							new Resource<Object>(new ResponseMessage("Could not find entry in HA Proxy Config")),
+					return new ResponseEntity<>(
+							new Resource<>(new ResponseMessage("Could not find entry in HA Proxy Config")),
 							HttpStatus.NOT_FOUND);
 			} else
-				return new ResponseEntity<Resource<Object>>(
-						new Resource<Object>(new ResponseMessage("Could not Agent for Identifier")),
+				return new ResponseEntity<>(
+						new Resource<>(new ResponseMessage("Could not Agent for Identifier")),
 						HttpStatus.NOT_FOUND);
 	}
 }
