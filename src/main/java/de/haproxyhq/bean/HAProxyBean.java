@@ -9,7 +9,11 @@ public class HAProxyBean {
 
 	private String externalIp;
 	private PortRange portRange;
-	
+
+
+	public HAProxyBean(){
+		this.portRange = new PortRange();
+	}
 	public static class PortRange {
 		private int start;
 		private int end;
@@ -21,11 +25,10 @@ public class HAProxyBean {
 		public int getEnd() {
 			return end;
 		}
-		
+
 		public void setStart(int start) {
 			this.start = start;
 		}
-	
 		public void setEnd(int end) {
 			this.end = end;
 		}
@@ -51,7 +54,15 @@ public class HAProxyBean {
 			return portRange.getStart();
 	}
 
+    public void setPortRangeStart(int s) {
+        portRange.setStart(s);
+    }
+
 	public int getPortRangeEnd() {
 		return portRange.getEnd();
 	}
+
+    public void  setPortRangeEnd(int e) {
+        portRange.setEnd(e);
+    }
 }
