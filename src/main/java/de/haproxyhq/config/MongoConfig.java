@@ -21,7 +21,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
 
 
-    @Value("${MONGODB_HOSTS}")
+    @Value("${MONGODB_HOST}")
     List<String> mongoHosts;
 
     @Value("${SPRING_DATA_MONGODB_PORT}")
