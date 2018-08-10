@@ -68,7 +68,7 @@ public class HAProxySectionConfigurerController {
 			return new ResponseEntity<>(
 					new Resource<>(new ResponseMessage("Agent name is not of type id.")), HttpStatus.NOT_FOUND);
 		}
-		Agent defaultAgent = agentRepository.findOne(agentId);
+		Agent defaultAgent = agentRepository.findById(agentId).orElse(null);
 		if (defaultAgent != null) {
 			HAProxyConfig haProxyConfig = defaultAgent.getHaProxyConfig();
 
@@ -91,17 +91,14 @@ public class HAProxySectionConfigurerController {
 			} else
 				log.debug("Configuration Entry already exists in HAProxy config " + request);
 				return new ResponseEntity<>(
-						new Resource<>(
-								new ResponseMessage("Configuration Entry already exists in HAProxy config")),
+						new Resource<>(new ResponseMessage("Configuration Entry already exists in HAProxy config")),
 						HttpStatus.BAD_REQUEST);
 
 		} else
 			log.debug("Could not find agent for name: " + agent);
-			return new ResponseEntity<>(
 
-					new Resource<>(new ResponseMessage("Could not find agent for name: " + agent)),
+		return new ResponseEntity<>(new Resource<>(new ResponseMessage("Could not find agent for name: " + agent)),
 					HttpStatus.NOT_FOUND);
-
 	}
 
 	@RequestMapping(value = "/{agent}/schemas", method = RequestMethod.DELETE)
@@ -111,7 +108,7 @@ public class HAProxySectionConfigurerController {
 
 			ObjectId agentId = new ObjectId(agent);
 		
-			Agent defaultAgent = agentRepository.findOne(agentId);
+			Agent defaultAgent = agentRepository.findById(agentId).orElse(null);
 			if (defaultAgent != null) {
 				HAProxyConfig haProxyConfig = defaultAgent.getHaProxyConfig();
 

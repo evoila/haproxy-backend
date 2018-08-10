@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.restdocs.RestDocumentation;
+import org.springframework.restdocs.JUnitRestDocumentation;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
@@ -32,7 +32,7 @@ public abstract class MockMvcTest {
 	protected MockMvc mockMvc;
 	
 	@Rule
-	public final RestDocumentation restDocumentation = new RestDocumentation("target/generated-snippets");
+	public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation("target/generated-snippets");
 	
 	@Autowired
 	private WebApplicationContext webApplicationContext;
