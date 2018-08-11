@@ -4,6 +4,6 @@ spring:
     host: "${RABBITMQ_HOST}"
   data:
     mongodb:
-      host: "${MONGODB_HOST}
+      host: "${MONGODB_HOST}"
 haproxy:
   external-ip: "${HAPROXY-AGENT_HOST}"
