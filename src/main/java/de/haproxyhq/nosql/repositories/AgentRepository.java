@@ -6,6 +6,8 @@ import org.springframework.data.repository.query.Param;
 
 import de.haproxyhq.nosql.model.Agent;
 
+import java.util.Optional;
+
 /**
  * 
  * @author Maximilian Büttner, Jonas Depoix, Johannes Hiemer.
@@ -14,5 +16,7 @@ import de.haproxyhq.nosql.model.Agent;
 public interface AgentRepository extends MongoRepository<Agent, ObjectId> {
 	
 	Agent findByName(@Param("name") String name);
+
+	Optional<Agent> findAgentByAgentId(@Param("id") String id);
 	
 }

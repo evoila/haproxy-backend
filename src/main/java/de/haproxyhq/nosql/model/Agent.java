@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Agent extends AbstractEntity {
 
+    private String agentId;
+
 	private String name;
 
 	private String description;
@@ -44,7 +46,15 @@ public class Agent extends AbstractEntity {
 				Math.abs(this.getHaProxyHeartbeatTimestamp() - currentTimestamp) < 120000);
 	}
 
-	public String getName() {
+    public String getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(String agentId) {
+        this.agentId = agentId;
+    }
+
+    public String getName() {
 		return name;
 	}
 

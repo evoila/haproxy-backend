@@ -49,26 +49,17 @@ public class HAProxySectionConfigurerController {
 	@Autowired
 	private HAProxySectionHandler haProxySectionHandler;
 
-	@RequestMapping(value = "/{agent}/schemas", method = RequestMethod.PUT)
-	public ResponseEntity<Resource<Object>> appendListenerSection(@PathVariable("agent") String agent,
+	@RequestMapping(value = "/{agentId}/schemas", method = RequestMethod.PUT)
+	public ResponseEntity<Resource<Object>> appendListenerSection(@PathVariable("agentId") String agentId,
 			@RequestParam("type") String type, @RequestBody InternalConnectionDetails internalConnectionDetails,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		if (agent == null) {
-			log.debug("No agent name provided.");
+		if (agentId == null) {
 			return new ResponseEntity<>(
-					new Resource<>(new ResponseMessage("No agent name provided.")), HttpStatus.NOT_FOUND);
+					new Resource<>(new ResponseMessage("No agent id provided.")), HttpStatus.NOT_FOUND);
 		}
 
-		ObjectId agentId;
-		try {
-			agentId = new ObjectId(agent);
-		} catch (IllegalArgumentException ex) {
-			log.debug("Agent name is not of type id.");
-			return new ResponseEntity<>(
-					new Resource<>(new ResponseMessage("Agent name is not of type id.")), HttpStatus.NOT_FOUND);
-		}
-		Agent defaultAgent = agentRepository.findById(agentId).orElse(null);
+		Agent defaultAgent = agentRepository.findAgentByAgentId(agentId).orElse(null);
 		if (defaultAgent != null) {
 			HAProxyConfig haProxyConfig = defaultAgent.getHaProxyConfig();
 
@@ -95,20 +86,18 @@ public class HAProxySectionConfigurerController {
 						HttpStatus.BAD_REQUEST);
 
 		} else
-			log.debug("Could not find agent for name: " + agent);
+			log.debug("Could not find agent for id: " + agentId);
 
-		return new ResponseEntity<>(new Resource<>(new ResponseMessage("Could not find agent for name: " + agent)),
+		return new ResponseEntity<>(new Resource<>(new ResponseMessage("Could not find agent for id: " + agentId)),
 					HttpStatus.NOT_FOUND);
 	}
 
-	@RequestMapping(value = "/{agent}/schemas", method = RequestMethod.DELETE)
-	public ResponseEntity<Resource<Object>> removeListenerSection(@PathVariable("agent") String agent,
+	@RequestMapping(value = "/{agentId}/schemas", method = RequestMethod.DELETE)
+	public ResponseEntity<Resource<Object>> removeListenerSection(@PathVariable("agentId") String agentId,
 			@RequestParam("type") String type, @RequestBody InternalConnectionDetails internalConnectionDetails,
 			HttpServletRequest request, HttpServletResponse response) {
 
-			ObjectId agentId = new ObjectId(agent);
-		
-			Agent defaultAgent = agentRepository.findById(agentId).orElse(null);
+			Agent defaultAgent = agentRepository.findAgentByAgentId(agentId).orElse(null);
 			if (defaultAgent != null) {
 				HAProxyConfig haProxyConfig = defaultAgent.getHaProxyConfig();
 
