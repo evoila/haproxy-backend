@@ -34,7 +34,7 @@ public class AgentEventHandler {
 	@HandleAfterSave
 	public void publishConfig(Agent agent) {
 		try {
-			configPublisher.publishAgentConfig(agent.getAgentId());
+			configPublisher.publishAgentConfig(agent.getId().toString());
 		} catch (IllegalStateException | TimeoutException e) {
 			log.error(e.getMessage(), e);
 		}

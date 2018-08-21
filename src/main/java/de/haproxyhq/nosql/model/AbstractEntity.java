@@ -17,6 +17,10 @@ public class AbstractEntity {
 		return id;
 	}
 
+	public void setId(ObjectId objectId) {
+	    this.id = objectId;
+    }
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof AbstractEntity) if(this.id.equals(((AbstractEntity) obj).getId())) return true;

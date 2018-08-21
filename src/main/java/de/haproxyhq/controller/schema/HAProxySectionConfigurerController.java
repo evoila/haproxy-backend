@@ -58,8 +58,7 @@ public class HAProxySectionConfigurerController {
 			return new ResponseEntity<>(
 					new Resource<>(new ResponseMessage("No agent id provided.")), HttpStatus.NOT_FOUND);
 		}
-
-		Agent defaultAgent = agentRepository.findAgentByAgentId(agentId).orElse(null);
+        Agent defaultAgent = agentRepository.findById(new ObjectId(agentId)).orElse(null);
 		if (defaultAgent != null) {
 			HAProxyConfig haProxyConfig = defaultAgent.getHaProxyConfig();
 
@@ -72,7 +71,7 @@ public class HAProxySectionConfigurerController {
 				agentRepository.save(defaultAgent);
 
 				try {
-					amqpPublisher.publishAgentConfig(defaultAgent.getAgentId());
+					amqpPublisher.publishAgentConfig(agentId);
 				} catch (IllegalStateException | TimeoutException e) {
 					log.error(e.getMessage(), e);
 				}
@@ -97,7 +96,7 @@ public class HAProxySectionConfigurerController {
 			@RequestParam("type") String type, @RequestBody InternalConnectionDetails internalConnectionDetails,
 			HttpServletRequest request, HttpServletResponse response) {
 
-			Agent defaultAgent = agentRepository.findAgentByAgentId(agentId).orElse(null);
+			Agent defaultAgent = agentRepository.findById(new ObjectId(agentId)).orElse(null);
 			if (defaultAgent != null) {
 				HAProxyConfig haProxyConfig = defaultAgent.getHaProxyConfig();
 
@@ -109,7 +108,7 @@ public class HAProxySectionConfigurerController {
 					agentRepository.save(defaultAgent);
 
 					try {
-						amqpPublisher.publishAgentConfig(defaultAgent.getAgentId());
+						amqpPublisher.publishAgentConfig(agentId);
 					} catch (IllegalStateException | TimeoutException e) {
 						log.error(e.getMessage(), e);
 					}

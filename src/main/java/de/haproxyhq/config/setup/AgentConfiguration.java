@@ -33,7 +33,7 @@ public class AgentConfiguration {
 
     @PostConstruct
     public void setupAgent() {
-        Agent existingAgent = agentRepository.findAgentByAgentId(haProxyAgentId).orElse(null);
+        Agent existingAgent = agentRepository.findById(new ObjectId(haProxyAgentId)).orElse(null);
 
         if (existingAgent == null) {
             Agent agent = new Agent();
@@ -46,7 +46,7 @@ public class AgentConfiguration {
             agent.setName("Default HaProxy Agent");
             agent.setAuthToken(haProxyAgentToken);
             agent.setVersion("1.0");
-            agent.setAgentId(haProxyAgentId);
+            agent.setId(new ObjectId(haProxyAgentId));
 
             agentRepository.save(agent);
         }
