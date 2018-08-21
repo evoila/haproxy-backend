@@ -72,7 +72,7 @@ public class HAProxySectionConfigurerController {
 				agentRepository.save(defaultAgent);
 
 				try {
-					amqpPublisher.publishAgentConfig(defaultAgent.getId());
+					amqpPublisher.publishAgentConfig(defaultAgent.getAgentId());
 				} catch (IllegalStateException | TimeoutException e) {
 					log.error(e.getMessage(), e);
 				}
@@ -109,7 +109,7 @@ public class HAProxySectionConfigurerController {
 					agentRepository.save(defaultAgent);
 
 					try {
-						amqpPublisher.publishAgentConfig(defaultAgent.getId());
+						amqpPublisher.publishAgentConfig(defaultAgent.getAgentId());
 					} catch (IllegalStateException | TimeoutException e) {
 						log.error(e.getMessage(), e);
 					}

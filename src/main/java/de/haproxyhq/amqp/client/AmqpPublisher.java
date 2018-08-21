@@ -32,10 +32,9 @@ public class AmqpPublisher {
 	@Autowired
 	private CustomAmqpConfig config;
 
-	public void publishAgentConfig(ObjectId agentId) throws IllegalStateException, TimeoutException {
-		final String agentIdAsString = agentId.toString();
-		String exchange = agentIdAsString;
-		String routingKey = agentIdAsString;
+	public void publishAgentConfig(String agentId) throws IllegalStateException, TimeoutException {
+		String exchange = agentId;
+		String routingKey = agentId;
 		sendMessage(exchange, routingKey, config.getReplyMessage());
 	}
 
