@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,13 @@ public class CustomAmqpConfig {
 		rabbitTemplate.setCorrelationKey(UUID.randomUUID().toString());
 	}
 
+	@Bean
+	public AsyncRabbitTemplate asyncRabbitTemplate() {
+		AsyncRabbitTemplate asyncRabbitTemplate=new AsyncRabbitTemplate(rabbitTemplate);
+		asyncRabbitTemplate.setReceiveTimeout(10000);
+		return asyncRabbitTemplate;
+	}
+
 	public String getCharset() {
 		return Charset.defaultCharset().displayName();
 	}
@@ -51,7 +59,8 @@ public class CustomAmqpConfig {
         return replyMessage;
     }
 
-    public void setReplyMessage(String replyMessage) {
+    public void setReplyMessage(String replyMessage)
+	{
         this.replyMessage = replyMessage;
     }
 }

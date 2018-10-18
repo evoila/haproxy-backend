@@ -2,6 +2,7 @@ package de.haproxyhq.amqp.client;
 
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import org.bson.types.ObjectId;
@@ -9,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,6 +35,9 @@ public class AmqpPublisher {
 	@Autowired
 	private CustomAmqpConfig config;
 
+	@Autowired
+	private AsyncRabbitTemplate asyncRabbitTemplate;
+
 	public void publishAgentConfig(String agentId) throws IllegalStateException, TimeoutException {
 		String exchange = agentId;
 		String routingKey = agentId;
@@ -42,16 +48,19 @@ public class AmqpPublisher {
 			throws TimeoutException, IllegalStateException {
 
 		Message message = createMessage(payload);
-
-		Message response = this.rabbitTemplate.sendAndReceive(exchange, routingKey, message);
-
-		log.info("Returning response: " + response);
-
-		if (response == null) {
-			throw new TimeoutException("Job is taking too long, probably Agent on HaProxy Service Key Host is!");
+		AsyncRabbitTemplate.RabbitMessageFuture future=asyncRabbitTemplate.sendAndReceive(exchange,routingKey,message);
+		try {
+			Message response = future.get();
+			if (response == null) {
+				throw new TimeoutException("Job is taking too long, probably Agent on HaProxy Service Key Host is!");
+			}
+			validateResponse(response);
+		} catch (InterruptedException e) {
+			throw new IllegalStateException("Haproxy Agent Job interrupted");
+		} catch (ExecutionException e) {
+			throw new IllegalStateException("Haproxy Agent Job Exception Error");
 		}
 
-		validateResponse(response);
 	}
 
 	protected void validateResponse(Message response) throws IllegalStateException {
@@ -66,11 +75,6 @@ public class AmqpPublisher {
 		MessageProperties messageProperties = new MessageProperties();
 		messageProperties.setContentEncoding(config.getCharset());
 		messageProperties.setContentType(config.getContentType());
-		messageProperties.setCorrelationIdString(newCorrelationId());
 		return new Message(payload.getBytes(), messageProperties);
-	}
-
-	protected String newCorrelationId() {
-		return UUID.randomUUID().toString();
 	}
 }
